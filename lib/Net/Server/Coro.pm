@@ -74,16 +74,6 @@ sub loop {
     my $self = $SELF = shift;
     my $prop = $self->{server};
 
-    async {
-        # We want this to be higher priority so it gets timeslices
-        # when other things cede; this guarantees that we notice
-        # socket activity and deal.
-        $Coro::current->prio(3);
-        while () {
-            EV::loop();
-        }
-    };
-
     for my $socket ( @{ $prop->{sock} } ) {
         async {
             while (1) {
@@ -100,6 +90,23 @@ sub loop {
             }
         };
     }
+
+    async {
+        # We want this to be higher priority so it gets timeslices
+        # when other things cede; this guarantees that we notice
+        # socket activity and deal.
+        $Coro::current->prio(3);
+
+        # EV needs to service something before we notice signals.
+        # This interrupts the event loop every 10 seconds to force it
+        # to check if we got sent a SIGINT, for instance.  Otherwise
+        # it would hang until it got an I/O interrupt.
+        my $death_notice = EV::timer(10, 10, sub {});
+        while (1) {
+            EV::loop( );
+        }
+    };
+
     schedule;
 }
 
