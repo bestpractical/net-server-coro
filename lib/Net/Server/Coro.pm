@@ -54,7 +54,6 @@ sub handler {
         my $fh   = pop @FH;
         if ($fh) {
             $prop->{connected} = 1;
-            my $from = $fh->peername;
             $prop->{client} = $fh;
             $SELF->run_client_connection;
             last if $SELF->done;
@@ -73,6 +72,17 @@ sub handler {
 sub loop {
     my $self = $SELF = shift;
     my $prop = $self->{server};
+
+    async {
+        # We want this to be higher priority so it gets timeslices
+        # when other things cede; this guarantees that we notice
+        # socket activity and deal.
+        $Coro::current->prio(3);
+        while () {
+            EV::loop();
+        }
+    };
+
     for my $socket ( @{ $prop->{sock} } ) {
         async {
             while (1) {
