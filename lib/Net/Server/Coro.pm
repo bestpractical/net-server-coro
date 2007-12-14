@@ -3,6 +3,7 @@ package Net::Server::Coro;
 use strict;
 use warnings;
 use vars qw($VERSION);
+use EV;
 use Coro;
 use Coro::Semaphore;
 use Coro::Handle;
