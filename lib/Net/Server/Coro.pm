@@ -54,6 +54,7 @@ sub handler {
         my $prop = $SELF->{server};
         my $fh   = pop @FH;
         if ($fh) {
+            $Coro::current->desc("Active connection");
             $prop->{connected} = 1;
             $prop->{client} = $fh;
             $SELF->run_client_connection;
@@ -64,6 +65,7 @@ sub handler {
         } else {
             last if @POOL >= 20;    #$MAX_POOL;
             push @POOL, $Coro::current;
+            $Coro::current->desc("Idle connection");
             schedule;
         }
     }
@@ -76,6 +78,7 @@ sub loop {
 
     for my $socket ( @{ $prop->{sock} } ) {
         async {
+            $Coro::current->desc("Listening on port @{[$socket->sockport]}");
             while (1) {
                 $connections->down;
                 my $accepted = scalar $socket->accept;
@@ -96,6 +99,7 @@ sub loop {
         # when other things cede; this guarantees that we notice
         # socket activity and deal.
         $Coro::current->prio(3);
+        $Coro::current->desc("Event loop");
 
         # EV needs to service something before we notice signals.
         # This interrupts the event loop every 10 seconds to force it
