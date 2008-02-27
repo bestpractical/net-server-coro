@@ -66,11 +66,10 @@ sub loop {
         $Coro::current->prio(3);
         $Coro::current->desc("Event loop");
 
-        # EV needs to service something before we notice signals.
-        # This interrupts the event loop every 10 seconds to force it
-        # to check if we got sent a SIGINT, for instance.  Otherwise
-        # it would hang until it got an I/O interrupt.
-        my $death_notice = EV::timer( 5, 5, sub { } );
+        # Use EV signal handlers;
+        my @shutdown = map EV::signal( $_ => sub { $self->server_close; } ),
+            qw/INT TERM QUIT/;
+        my $hup = EV::signal( HUP => sub { $self->sig_hup } );
         while (1) {
             EV::loop();
         }
