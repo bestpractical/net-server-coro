@@ -185,6 +185,10 @@ sub WRITE {
     }
 }
 
+sub FILENO {
+   fileno $_[0][0]
+}
+
 use constant SSL_RECEIVED_SHUTDOWN => 2;
 
 sub CLOSE {
