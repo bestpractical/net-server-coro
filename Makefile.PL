@@ -4,7 +4,7 @@ name ('Net-Server-Coro');
 author ('Alex Vandiver <alexmv@bestpractical.com>');
 version_from ('lib/Net/Server/Coro.pm');
 abstract_from('lib/Net/Server/Coro.pm');
-license('perl');
+license('MIT');
 
 requires('Coro');
 requires('EV');
