@@ -227,6 +227,7 @@ use vars qw/$CONTEXT/;
 
 sub start_SSL {
     my $ctx;
+    $_[0][9] = 1;
 
     unless ($CONTEXT) {
         $ctx = $CONTEXT = Net::SSLeay::CTX_new;
