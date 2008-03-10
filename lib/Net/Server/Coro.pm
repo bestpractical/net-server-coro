@@ -8,7 +8,7 @@ use Coro;
 use base qw(Net::Server);
 use Net::Server::Proto::Coro;
 
-$VERSION = 0.1;
+$VERSION = 0.2;
 
 use vars qw/$SELF @FH/;
 
