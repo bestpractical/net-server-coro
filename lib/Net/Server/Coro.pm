@@ -9,7 +9,7 @@ use Coro;
 use base qw(Net::Server);
 use Net::Server::Proto::Coro;
 
-$VERSION = 0.2;
+$VERSION = 0.3;
 
 =head1 NAME
 

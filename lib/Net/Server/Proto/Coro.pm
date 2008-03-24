@@ -87,6 +87,7 @@ sub READ_UNTIL {
         }
 
         return unless Coro::Handle::FH::readable( $_[0] );
+        return unless $_[0][10];
         my $r    = Net::SSLeay::read( $_[0][10] );
         my $errs = Net::SSLeay::print_errs('SSL_read');
         if ($errs) {
@@ -160,6 +161,7 @@ sub WRITE {
     return unless Coro::Handle::FH::writable( $_[0] );
     while (1) {
         my $str = substr( $_[1], $ofs, $len );
+        return unless $_[0][10];
         my $r = Net::SSLeay::write( $_[0][10], $str );
 
         if ( $r == -1 ) {
