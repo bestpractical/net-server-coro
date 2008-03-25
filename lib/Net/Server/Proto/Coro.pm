@@ -87,30 +87,23 @@ sub READ_UNTIL {
         }
 
         return unless Coro::Handle::FH::readable( $_[0] );
-        return unless $_[0][10];
+        $_[0]->force_close and return unless $_[0][10];
         my $r    = Net::SSLeay::read( $_[0][10] );
         my $errs = Net::SSLeay::print_errs('SSL_read');
-        if ($errs) {
-            warn "SSL Read error: $errs\n";
-            $_[0]->CLOSE;
-            last;
-        }
+        warn "SSL Read error: $errs\n" if $errs;
 
         if ( defined $r and length $r ) {
             $_[0][3] .= $r;
             $tries = 0;
         } else {
-            if ( ++$tries >= 10 ) {
-                $_[0]->force_close;
-                return;
-            }
+            $_[0]->force_close and return if ++$tries >= 100;
         }
     }
 }
 
 sub READ {
     return Coro::Handle::FH::READ(@_) unless $_[0][9];
-    return unless $_[0][10] or $_[0]->start_SSL();
+    $_[0]->force_close and return unless $_[0][10] or $_[0]->start_SSL();
 
     my $len  = $_[2];
     my $ofs  = $_[3];
@@ -133,7 +126,7 @@ sub READ {
 
 sub READLINE {
     return Coro::Handle::FH::READLINE(@_) unless $_[0][9];
-    return unless $_[0][10] or $_[0]->start_SSL();
+    $_[0]->force_close and return unless $_[0][10] or $_[0]->start_SSL();
 
     my $irs = $_[1] || $/;
     my $stop = sub {
@@ -152,7 +145,7 @@ sub READLINE {
 
 sub WRITE {
     return Coro::Handle::FH::WRITE(@_) unless $_[0][9];
-    return unless $_[0][10] or $_[0]->start_SSL();
+    $_[0]->force_close and return unless $_[0][10] or $_[0]->start_SSL();
 
     my $len = defined $_[2] ? $_[2] : length $_[1];
     my $ofs = $_[3] || 0;
@@ -161,16 +154,16 @@ sub WRITE {
     return unless Coro::Handle::FH::writable( $_[0] );
     while (1) {
         my $str = substr( $_[1], $ofs, $len );
-        return unless $_[0][10];
+        $_[0]->force_close and return unless $_[0][10];
         my $r = Net::SSLeay::write( $_[0][10], $str );
 
-        if ( $r == -1 ) {
+        if ( $r < 0 ) {
             my $err = Net::SSLeay::get_error( $_[0][10], $r );
 
             if ( $err == Net::SSLeay::ERROR_WANT_READ() ) {
-                Coro::Handle::FH::readable( $_[0] );
+                $_[0]->force_close and return unless Coro::Handle::FH::readable( $_[0] );
             } elsif ( $err == Net::SSLeay::ERROR_WANT_WRITE() ) {
-                Coro::Handle::FH::writable( $_[0] );
+                $_[0]->force_close and return unless Coro::Handle::FH::writable( $_[0] );
             } else {
                 my $errstr = Net::SSLeay::ERR_error_string($err);
                 warn "SSL write error: $err, $errstr\n";
@@ -182,7 +175,7 @@ sub WRITE {
             $ofs += $r;
             $res += $r;
             return $res unless $len;
-            return      unless Coro::Handle::FH::writable( $_[0] );
+            $_[0]->force_close and return unless Coro::Handle::FH::writable( $_[0] );
         }
     }
 }
@@ -209,6 +202,7 @@ sub CLOSE {
     my $handle = $_[0][0];
     Coro::Handle::FH::cleanup(@_);
     shutdown( $handle, 2 );
+    return 1;
 }
 
 sub ssl_free {
@@ -220,6 +214,7 @@ sub ssl_free {
 sub force_close {
     $_[0]->ssl_free if $_[0][10];
     $_[0]->CLOSE;
+    return 1;
 }
 
 use constant SSL_MODE_ENABLE_PARTIAL_WRITE       => 1;
@@ -245,18 +240,17 @@ sub start_SSL {
     $ctx = $CONTEXT;
     $_[0][11] = $ctx;
 
-    my $ssl = Net::SSLeay::new($ctx);
-    Net::SSLeay::set_fd( $ssl, fileno( $_[0][0] ) );
-    $_[0][10] = $ssl;
+    $_[0][10] = Net::SSLeay::new($ctx);
+    Net::SSLeay::set_fd( $_[0][10], fileno( $_[0][0] ) );
 
     while (1) {
-        my $rv = Net::SSLeay::accept($ssl);
+        my $rv = Net::SSLeay::accept($_[0][10]);
         if ( $rv < 0 ) {
-            my $err = Net::SSLeay::get_error( $ssl, $rv );
+            my $err = Net::SSLeay::get_error( $_[0][10], $rv );
             if ( $err == Net::SSLeay::ERROR_WANT_READ() ) {
-                return unless Coro::Handle::FH::readable( $_[0] );
+                $_[0]->force_close and return unless Coro::Handle::FH::readable( $_[0] );
             } elsif ( $err == Net::SSLeay::ERROR_WANT_WRITE() ) {
-                return unless Coro::Handle::FH::writable( $_[0] );
+                $_[0]->force_close and return unless Coro::Handle::FH::writable( $_[0] );
             } else {
                 my $errstr = Net::SSLeay::ERR_error_string($err);
                 warn "SSL accept error: $err, $errstr\n";
