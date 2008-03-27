@@ -80,6 +80,12 @@ sub coro_instance {
     close $fh;
 }
 
+# We override this to do nothing, or Net::Server closes
+# $self->{server}{client} -- which is he most recent connection, not
+# necessarily the current connection.  We also don't want the
+# STDERR/STDOUT redirection.
+sub post_process_request {}
+
 =head2 loop
 
 The main loop uses starts a number of L<Coro> coroutines:
@@ -107,6 +113,7 @@ The L<EV> event loop.
 sub loop {
     my $self = shift;
     my $prop = $self->{server};
+    $prop->{no_client_stdout} = 1;
 
     for my $socket ( @{ $prop->{sock} } ) {
         async {
