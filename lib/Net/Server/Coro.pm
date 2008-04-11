@@ -45,6 +45,7 @@ usage details.
 sub post_bind_hook {
     my $self = shift;
     my $prop = $self->{server};
+    delete $prop->{select};
     $prop->{sock} = [ map { make_coro_socket($_) } @{ $prop->{sock} } ];
 }
 
