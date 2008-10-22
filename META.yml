@@ -17,4 +17,4 @@ requires:
   Coro: 0
   EV: 0
   Net::Server: 0
-version: 0.3
+version: 0.4

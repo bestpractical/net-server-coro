@@ -9,7 +9,7 @@ use Coro;
 use base qw(Net::Server);
 use Net::Server::Proto::Coro;
 
-$VERSION = 0.3;
+$VERSION = 0.4;
 
 =head1 NAME
 
@@ -191,10 +191,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 =cut
 
-## Due to outstanding patches for Net::Server
+## Due to outstanding rt.cpan.org #31437 for Net::Server
 use Net::Server::Proto::TCP;
 
-package Net::Server::Proto::TCP;
+package # Hide from PAUSE indexer
+    Net::Server::Proto::TCP;
 no warnings 'redefine';
 
 sub accept {

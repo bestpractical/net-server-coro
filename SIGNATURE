@@ -25,12 +25,12 @@ SHA1 54fcbed19232ec959bb17cfb4410599afc7f0779 inc/Module/Install/Makefile.pm
 SHA1 7d3be9b158e37b2b2c22084740099955623b1d56 inc/Module/Install/Metadata.pm
 SHA1 0a8b66180229ba2f9deaea1fedd0aacf7a7ace6b inc/Module/Install/Win32.pm
 SHA1 d3352eb33fe43a5f3ead513f645224fe34d73bc9 inc/Module/Install/WriteAll.pm
-SHA1 48f1030e3ce5f7c4bd3b4deff1ed9b8ea9daad49 lib/Net/Server/Coro.pm
+SHA1 8fae78d53359e95bd4978e0fe2bd00f3ae95096c lib/Net/Server/Coro.pm
 SHA1 53ac241d1d8e7d00485b969db69c5033ac71ac79 lib/Net/Server/Proto/Coro.pm
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v2.0.9 (GNU/Linux)
 
-iEYEARECAAYFAkj/YTgACgkQMflWJZZAbqDVYACfZjgBN//OR6oKkBqf32rvmsxk
-qPcAoILP0tuaIbuu5OOzH8ygrDgslpm+
-=iO1b
+iEYEARECAAYFAkj/ZR0ACgkQMflWJZZAbqCriACfWasRL8ob/ZKCNqwVrHT9jaF+
+rnAAnAyZdHWwYxF+pKUHbpTMx0wIKg1y
+=RI5h
 -----END PGP SIGNATURE-----
