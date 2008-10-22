@@ -1,0 +1,36 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.55.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 976dbc3e410f925198152f3da7bd4e7d31f01d00 MANIFEST
+SHA1 58951daf155c81369d55cddeb8b4a0e12f2e046c META.yml
+SHA1 a7f6dd17a0bb05a772709b76356dc29eb5d63060 Makefile.PL
+SHA1 7e2cfa1b9efe0d502ee57717649c90ba4bd28ba9 inc/Module/Install.pm
+SHA1 6e1392d80a0f239eecd5664f7f21f922cedb9329 inc/Module/Install/Base.pm
+SHA1 f69417fe831d9cc22a78f00a617afadceade4d81 inc/Module/Install/Can.pm
+SHA1 c61d02895330310048bf388881b5e2e064031561 inc/Module/Install/Fetch.pm
+SHA1 54fcbed19232ec959bb17cfb4410599afc7f0779 inc/Module/Install/Makefile.pm
+SHA1 7d3be9b158e37b2b2c22084740099955623b1d56 inc/Module/Install/Metadata.pm
+SHA1 0a8b66180229ba2f9deaea1fedd0aacf7a7ace6b inc/Module/Install/Win32.pm
+SHA1 d3352eb33fe43a5f3ead513f645224fe34d73bc9 inc/Module/Install/WriteAll.pm
+SHA1 48f1030e3ce5f7c4bd3b4deff1ed9b8ea9daad49 lib/Net/Server/Coro.pm
+SHA1 53ac241d1d8e7d00485b969db69c5033ac71ac79 lib/Net/Server/Proto/Coro.pm
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.9 (GNU/Linux)
+
+iEYEARECAAYFAkj/YTgACgkQMflWJZZAbqDVYACfZjgBN//OR6oKkBqf32rvmsxk
+qPcAoILP0tuaIbuu5OOzH8ygrDgslpm+
+=iO1b
+-----END PGP SIGNATURE-----
