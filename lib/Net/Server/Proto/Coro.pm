@@ -47,7 +47,7 @@ sub is_ssl {
     return $self->[10] ? 1 : 0;
 }
 
-sub start_SSL   { Net::Server::Proto::Coro::FH::start_SSL( tied ${$_[0]} ); }
+sub start_SSL   { Net::Server::Proto::Coro::FH::start_SSL( tied ${$_[0]}, $_[1], $_[2]) }
 sub read        { Net::Server::Proto::Coro::FH::READ     ( tied ${$_[0]}, $_[1], $_[2], $_[3]) }
 sub sysread     { Net::Server::Proto::Coro::FH::READ     ( tied ${$_[0]}, $_[1], $_[2], $_[3]) }
 sub syswrite    { Net::Server::Proto::Coro::FH::WRITE    ( tied ${$_[0]}, $_[1], $_[2], $_[3]) }
@@ -225,6 +225,8 @@ use vars qw/$CONTEXT/;
 sub start_SSL {
     my $ctx;
     $_[0][9] = 1;
+    my $server_cert = $_[1] || "certs/server-cert.pem";
+    my $server_key  = $_[2] || "certs/server-key.pem";
 
     unless ($CONTEXT) {
         $ctx = $CONTEXT = Net::SSLeay::CTX_new;
@@ -232,10 +234,10 @@ sub start_SSL {
         Net::SSLeay::CTX_set_mode( $ctx,
             SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER
                 | SSL_MODE_ENABLE_PARTIAL_WRITE );
-        Net::SSLeay::CTX_use_PrivateKey_file( $ctx, "certs/server-key.pem",
+        Net::SSLeay::CTX_use_PrivateKey_file( $ctx, $server_key,
             Net::SSLeay::FILETYPE_PEM() );
         Net::SSLeay::CTX_use_certificate_chain_file( $ctx,
-            "certs/server-cert.pem" );
+            $server_cert );
     }
     $ctx = $CONTEXT;
     $_[0][11] = $ctx;
