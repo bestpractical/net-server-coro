@@ -9,5 +9,6 @@ license('MIT');
 requires('Coro');
 requires('EV');
 requires('Net::Server');
+requires('Net::SSLeay');
 
 &WriteAll;
