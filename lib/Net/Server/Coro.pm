@@ -42,11 +42,43 @@ usage details.
 
 =cut
 
+=head2 new
+
+Create new Net::Server::Coro object. It accepts these parameters (in
+addition to L<Net::Server> parameters):
+
+=item server_cert
+
+Path to the SSL certificate that the server should use. This can be
+either relative or absolute path.  Defaults to
+F<certs/server-cert.pem>
+
+=item server_key
+
+Path to the SSL certificate key that the server should use. This can
+be either relative or absolute path.  Defaults to
+F<certs/server-key.pem>
+
+=cut
+
+sub new {
+    my $class = shift;
+    my %args = @_;
+    my $self = $class->SUPER::new(@_);
+
+    # Set up certificates
+    $self->server_cert($args{'server_cert'}) if exists $args{'server_cert'};
+    $self->server_key($args{'server_key'})   if exists $args{'server_key'};
+
+    return $self;
+}
+
 sub post_bind_hook {
     my $self = shift;
     my $prop = $self->{server};
     delete $prop->{select};
-    $prop->{sock} = [ map { make_coro_socket($_) } @{ $prop->{sock} } ];
+
+    $prop->{sock} = [ map { $self->make_coro_socket($_) } @{ $prop->{sock} } ];
 }
 
 =head2 make_coro_socket SOCKET
@@ -57,15 +89,20 @@ it into a L<Net::Server::Proto::Coro> object.
 =cut
 
 sub make_coro_socket {
+    my $self = shift;
     my $socket = shift;
+
     my @extra;
     if ( $socket->isa("IO::Socket::SSL") ) {
         $socket = bless $socket, "Net::Server::Proto::TCP";
         @extra = ( expects_ssl => 1 );
     }
+
     $socket = Net::Server::Proto::Coro->new_from_fh(
         $socket,
         forward_class => ref($socket),
+        server_cert => $self->server_cert,
+        server_key => $self->server_key,
         @extra
     );
     return $socket;
@@ -142,6 +179,38 @@ sub loop {
     };
 
     schedule;
+}
+
+=head2 server_cert [PATH]
+
+Gets or sets the path fo the SSL certificate used by the server.
+
+=cut
+
+sub server_cert {
+    my $self = shift;
+    if (@_) {
+        my $cert = shift;
+        die "SSL certificate file ($cert) is not readable!" unless -r $cert;
+        $self->{'server_cert'} = $cert;
+    }
+    return $self->{'server_cert'};
+}
+
+=head2 server_key [PATH]
+
+Gets or sets the path fo the SSL key file used by the server.
+
+=cut
+
+sub server_key {
+    my $self = shift;
+    if (@_) {
+        my $key = shift;
+        die "SSL key file ($key) is not readable!" unless -r $key;
+        $self->{'server_key'} = $key;
+    }
+    return $self->{'server_key'};
 }
 
 =head1 DEPENDENCIES

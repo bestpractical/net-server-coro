@@ -27,7 +27,9 @@ sub accept {
             my $socket = $self->new_from_fh(
                 $fh,
                 forward_class => tied( ${$self} )->[7],
-                expects_ssl   => tied( ${$self} )->[9]
+                expects_ssl   => tied( ${$self} )->[9],
+                server_cert   => tied( ${$self} )->[12],
+                server_key    => tied( ${$self} )->[13],
             );
             return wantarray ? ( $socket, $peername ) : $socket;
         }
@@ -47,7 +49,7 @@ sub is_ssl {
     return $self->[10] ? 1 : 0;
 }
 
-sub start_SSL   { Net::Server::Proto::Coro::FH::start_SSL( tied ${$_[0]}, $_[1], $_[2]) }
+sub start_SSL   { Net::Server::Proto::Coro::FH::start_SSL( tied ${+shift}, @_) }
 sub read        { Net::Server::Proto::Coro::FH::READ     ( tied ${$_[0]}, $_[1], $_[2], $_[3]) }
 sub sysread     { Net::Server::Proto::Coro::FH::READ     ( tied ${$_[0]}, $_[1], $_[2], $_[3]) }
 sub syswrite    { Net::Server::Proto::Coro::FH::WRITE    ( tied ${$_[0]}, $_[1], $_[2], $_[3]) }
@@ -70,7 +72,10 @@ sub TIEHANDLE {
 
     my $self = $class->SUPER::TIEHANDLE(%arg);
     $self->[9]  = $arg{expects_ssl};
-    $self->[10] = undef;
+    $self->[10] = undef; # SSLeay object
+    $self->[11] = undef; # SSL context object
+    $self->[12] = $arg{server_cert};
+    $self->[13] = $arg{server_key};
 
     return $self;
 }
@@ -102,8 +107,9 @@ sub READ_UNTIL {
 }
 
 sub READ {
+
     return Coro::Handle::FH::READ(@_) unless $_[0][9];
-    $_[0]->force_close and return unless $_[0][10] or $_[0]->start_SSL();
+    $_[0]->force_close and return unless $_[0][10] or $_[0]->start_SSL;
 
     my $len  = $_[2];
     my $ofs  = $_[3];
@@ -126,7 +132,7 @@ sub READ {
 
 sub READLINE {
     return Coro::Handle::FH::READLINE(@_) unless $_[0][9];
-    $_[0]->force_close and return unless $_[0][10] or $_[0]->start_SSL();
+    $_[0]->force_close and return unless $_[0][10] or $_[0]->start_SSL;
 
     my $irs = $_[1] || $/;
     my $stop = sub {
@@ -145,7 +151,7 @@ sub READLINE {
 
 sub WRITE {
     return Coro::Handle::FH::WRITE(@_) unless $_[0][9];
-    $_[0]->force_close and return unless $_[0][10] or $_[0]->start_SSL();
+    $_[0]->force_close and return unless $_[0][10] or $_[0]->start_SSL;
 
     my $len = defined $_[2] ? $_[2] : length $_[1];
     my $ofs = $_[3] || 0;
@@ -225,8 +231,10 @@ use vars qw/$CONTEXT/;
 sub start_SSL {
     my $ctx;
     $_[0][9] = 1;
-    my $server_cert = $_[1] || "certs/server-cert.pem";
-    my $server_key  = $_[2] || "certs/server-key.pem";
+    my $server_cert = $_[1] || $_[0][12] || "certs/server-cert.pem";
+    my $server_key  = $_[2] || $_[0][13] || "certs/server-key.pem";
+    die "Can't read certificates ($server_cert and $server_key)\n"
+        unless -r $server_cert and -r $server_key;
 
     unless ($CONTEXT) {
         $ctx = $CONTEXT = Net::SSLeay::CTX_new;
