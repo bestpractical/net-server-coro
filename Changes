@@ -1,0 +1,20 @@
+Revision history for Net-Server-Coro
+
+0.5    Thu Oct 15 23:45:42 2009
+        * Allow start_SSL to take paths to server certificate and key
+          files (thanks to Dan Keder for the patch).
+        * Add missing Net::SSLeay dependency (thanks to Andreas
+          Koenig)
+
+0.4    Wed Oct 22 13:40:58 2008
+        * No code changes
+        * Hide Net::Server::Proto::TCP class from PAUSE indexer
+
+0.3    Wed Oct 22 13:33:56 2008
+        * Fixed licensing -- now licensed under the MIT license
+        * Better bullet-proofing on SSL errors
+        * Fix a bug where Net::Server closed the most recently-opened
+          connection whenever any connection closed.
+
+0.2    Mon Mar 10 15:20:08 2008
+        * Initial release to CPAN

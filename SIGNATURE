@@ -14,23 +14,24 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 976dbc3e410f925198152f3da7bd4e7d31f01d00 MANIFEST
-SHA1 58951daf155c81369d55cddeb8b4a0e12f2e046c META.yml
-SHA1 a7f6dd17a0bb05a772709b76356dc29eb5d63060 Makefile.PL
-SHA1 7e2cfa1b9efe0d502ee57717649c90ba4bd28ba9 inc/Module/Install.pm
-SHA1 6e1392d80a0f239eecd5664f7f21f922cedb9329 inc/Module/Install/Base.pm
-SHA1 f69417fe831d9cc22a78f00a617afadceade4d81 inc/Module/Install/Can.pm
-SHA1 c61d02895330310048bf388881b5e2e064031561 inc/Module/Install/Fetch.pm
-SHA1 54fcbed19232ec959bb17cfb4410599afc7f0779 inc/Module/Install/Makefile.pm
-SHA1 7d3be9b158e37b2b2c22084740099955623b1d56 inc/Module/Install/Metadata.pm
-SHA1 0a8b66180229ba2f9deaea1fedd0aacf7a7ace6b inc/Module/Install/Win32.pm
-SHA1 d3352eb33fe43a5f3ead513f645224fe34d73bc9 inc/Module/Install/WriteAll.pm
-SHA1 8fae78d53359e95bd4978e0fe2bd00f3ae95096c lib/Net/Server/Coro.pm
-SHA1 53ac241d1d8e7d00485b969db69c5033ac71ac79 lib/Net/Server/Proto/Coro.pm
+SHA1 65b9e4b55520525d4ea8de55a8f842decb492a61 Changes
+SHA1 bb31f89cfbb2ad6292be17274f6fb6fa2c40616b MANIFEST
+SHA1 02476a865e14c4d1aa9680b0646d0c85ac15e18c META.yml
+SHA1 bc22590cf5cc348fedc293e8ea39bcdc72ad897f Makefile.PL
+SHA1 fd5f3c4f0418efee3b9b16cf8c3902e8374909df inc/Module/Install.pm
+SHA1 7cd7c349afdf3f012e475507b1017bdfa796bfbd inc/Module/Install/Base.pm
+SHA1 ba186541bbf6439111f01fc70769cf24d22869bf inc/Module/Install/Can.pm
+SHA1 aaa50eca0d7751db7a4d953fac9bc72c6294e238 inc/Module/Install/Fetch.pm
+SHA1 3e83972921d54198d1246f7278f08664006cd65d inc/Module/Install/Makefile.pm
+SHA1 12bf1867955480d47d5171a9e9c6a96fabe0b58f inc/Module/Install/Metadata.pm
+SHA1 f7ee667e878bd2faf22ee9358a7b5a2cc8e91ba4 inc/Module/Install/Win32.pm
+SHA1 8ed29d6cf217e0977469575d788599cbfb53a5ca inc/Module/Install/WriteAll.pm
+SHA1 08783a8b2c71dceaab5a2a59c33f75a3f204ddbb lib/Net/Server/Coro.pm
+SHA1 472129b076d9ca798887a2204df2e47081f07e85 lib/Net/Server/Proto/Coro.pm
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.9 (GNU/Linux)
+Version: GnuPG v2.0.11 (GNU/Linux)
 
-iEYEARECAAYFAkj/ZR0ACgkQMflWJZZAbqCriACfWasRL8ob/ZKCNqwVrHT9jaF+
-rnAAnAyZdHWwYxF+pKUHbpTMx0wIKg1y
-=RI5h
+iEYEARECAAYFAkrX6/0ACgkQMflWJZZAbqC2qACdEp1wXCOTQbdpCYqP6/wsNtyC
+h1AAoLXSTjHkdu7XMTWPU39i2pwm7A37
+=fq3c
 -----END PGP SIGNATURE-----
