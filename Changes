@@ -1,5 +1,10 @@
 Revision history for Net-Server-Coro
 
+0.6    Fri Oct 16 10:55:17 2009
+        * Allow ->new to take paths to server certificate and key
+          files, and propagate them down to both SSL and TLS
+          connections.
+
 0.5    Thu Oct 15 23:45:42 2009
         * Allow start_SSL to take paths to server certificate and key
           files (thanks to Dan Keder for the patch).
