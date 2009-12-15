@@ -6,6 +6,7 @@ package Net::Server::Coro;
 use vars qw($VERSION);
 use EV;
 use Coro;
+use Coro::Specific;
 use base qw(Net::Server);
 use Net::Server::Proto::Coro;
 
@@ -79,6 +80,11 @@ sub post_bind_hook {
     delete $prop->{select};
 
     $prop->{sock} = [ map { $self->make_coro_socket($_) } @{ $prop->{sock} } ];
+
+    # set up coro::specific variables
+    foreach my $key (qw(client sockaddr sockport peeraddr peerport)) {
+        tie $prop->{$key}, Coro::Specific::;
+    }
 }
 
 =head2 make_coro_socket SOCKET
@@ -115,14 +121,16 @@ sub coro_instance {
     $Coro::current->desc("Active connection");
     $prop->{client} = $fh;
     $self->run_client_connection;
-    close $fh;
 }
 
-# We override this to do nothing, or Net::Server closes
-# $self->{server}{client} -- which is he most recent connection, not
-# necessarily the current connection.  We also don't want the
-# STDERR/STDOUT redirection.
-sub post_process_request {}
+sub post_accept_hook {
+    my $self = shift;
+    my $prop = $self->{server};
+    my $sock = $prop->{client};
+
+    ($prop->{sockaddr}, $prop->{sockport}) = ($sock->sockhost, $sock->sockport);
+    ($prop->{peeraddr}, $prop->{peerport}) = ($sock->peerhost, $sock->peerport);
+}
 
 =head2 loop
 
@@ -218,6 +226,11 @@ sub server_key {
 L<Coro>, L<EV>, L<Net::Server>
 
 =head1 BUGS AND LIMITATIONS
+
+The client filehandle, socket, and peer information all use
+L<Coro::Specific> in order to constrain their information to their
+coroutine.  Attempting to access them from a different coroutine will
+yield possibly unexpected results.
 
 Generally, all those of L<Coro>.  Please report any bugs or feature
 requests specific to L<Net::Server::Coro> to
