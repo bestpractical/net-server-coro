@@ -191,7 +191,7 @@ sub loop {
 
 =head2 server_cert [PATH]
 
-Gets or sets the path fo the SSL certificate used by the server.
+Gets or sets the path of the SSL certificate used by the server.
 
 =cut
 
@@ -207,7 +207,7 @@ sub server_cert {
 
 =head2 server_key [PATH]
 
-Gets or sets the path fo the SSL key file used by the server.
+Gets or sets the path of the SSL key file used by the server.
 
 =cut
 
