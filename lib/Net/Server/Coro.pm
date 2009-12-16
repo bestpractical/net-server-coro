@@ -10,7 +10,7 @@ use Coro::Specific;
 use base qw(Net::Server);
 use Net::Server::Proto::Coro;
 
-$VERSION = 0.6;
+$VERSION = 0.7;
 
 =head1 NAME
 

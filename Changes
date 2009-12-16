@@ -1,5 +1,9 @@
 Revision history for Net-Server-Coro
 
+0.7    Tue Dec 15 22:25:17 2009
+        * Use Coro::Specific variables for client filehandle, socket,
+          and peer info
+
 0.6    Fri Oct 16 10:55:17 2009
         * Allow ->new to take paths to server certificate and key
           files, and propagate them down to both SSL and TLS
