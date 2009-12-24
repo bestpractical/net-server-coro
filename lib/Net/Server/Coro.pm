@@ -125,7 +125,7 @@ sub coro_instance {
     $self->run_client_connection;
 }
 
-sub post_accept_hook {
+sub get_client_info {
     my $self = shift;
     my $prop = $self->{server};
     my $sock = $prop->{client};
@@ -136,6 +136,10 @@ sub post_accept_hook {
     if (defined $prop->{reverse_lookups}) {
         $prop->{peerhost} = Coro::Util::gethostbyaddr($sock->peeraddr, Socket::AF_INET);
     }
+
+    $self->log(3, $self->log_time
+        ." CONNECT TCP Peer: \"$prop->{peeraddr}:$prop->{peerport}\""
+        ." Local: \"$prop->{sockaddr}:$prop->{sockport}\"\n");
 }
 
 =head2 loop
