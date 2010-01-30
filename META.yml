@@ -21,4 +21,4 @@ requires:
   EV: 0
   Net::SSLeay: 0
   Net::Server: 0
-version: 0.7
+version: 0.8
