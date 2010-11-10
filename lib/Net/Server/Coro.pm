@@ -81,37 +81,33 @@ sub post_bind_hook {
     my $prop = $self->{server};
     delete $prop->{select};
 
-    $prop->{sock} = [ map { $self->make_coro_socket($_) } @{ $prop->{sock} } ];
-
     # set up coro::specific variables
     foreach my $key (qw(client sockaddr sockport peeraddr peerport peerhost)) {
         tie $prop->{$key}, Coro::Specific::;
     }
 }
 
-=head2 make_coro_socket SOCKET
+=head2 proto_object HOST, PORT, PROTO
 
-Takes an L<IO::Socket> or L<Net::Server::Proto> object, and converts
-it into a L<Net::Server::Proto::Coro> object.
+Wraps socket creation, turning all socket types into
+L<Net::Server::Proto::Coro> objects.
 
 =cut
 
-sub make_coro_socket {
+sub proto_object {
     my $self = shift;
-    my $socket = shift;
+    my ($host, $port, $proto) = @_;
 
-    my @extra;
-    if ( $socket->isa("IO::Socket::SSL") ) {
-        $socket = bless $socket, "Net::Server::Proto::TCP";
-        @extra = ( expects_ssl => 1 );
-    }
-
+    my $is_ssl = ($proto eq "SSL" or $proto eq "SSLEAY");
+    my $socket = $self->SUPER::proto_object(
+        $host, $port, $is_ssl ? "TCP" : $proto
+    );
     $socket = Net::Server::Proto::Coro->new_from_fh(
         $socket,
         forward_class => ref($socket),
         server_cert => $self->server_cert,
         server_key => $self->server_key,
-        @extra
+        expects_ssl => $is_ssl,
     );
     return $socket;
 }

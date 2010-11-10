@@ -16,6 +16,13 @@ sub new_from_fh {
     bless \$self, ref $class ? ref $class : $class;
 }
 
+sub NS_host   { tied( ${+shift} )->[0]->NS_host(@_) };
+sub NS_port   { tied( ${+shift} )->[0]->NS_port(@_) };
+sub NS_proto  { tied( ${+shift} )->[0]->NS_proto(@_) };
+sub sockport  { tied( ${+shift} )->[0]->sockport(@_) };
+sub connect   { tied( ${+shift} )->[0]->connect(@_) };
+sub reconnect { tied( ${+shift} )->[0]->reconnect(@_) };
+
 sub accept {
     my $self = shift;
 
