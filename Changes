@@ -1,5 +1,8 @@
 Revision history for Net-Server-Coro
 
+0.9    Sun Nov 15 11:53:17 2010
+        * Change socket code to work with Net::Server >= 0.99
+
 0.8    Sat Jan 30 11:10:17 2010
         * Do reverse lookups (into "peerhost") if reverse_lookups is
           set, as Net::Server does
