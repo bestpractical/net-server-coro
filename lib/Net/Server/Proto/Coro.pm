@@ -11,7 +11,7 @@ sub new_from_fh {
     my $fh    = shift or return;
     my $self  = do { local *Coro::Handle };
 
-    tie $self, 'Net::Server::Proto::Coro::FH', fh => $fh, @_;
+    tie *$self, 'Net::Server::Proto::Coro::FH', fh => $fh, @_;
 
     bless \$self, ref $class ? ref $class : $class;
 }
