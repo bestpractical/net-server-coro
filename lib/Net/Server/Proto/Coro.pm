@@ -13,7 +13,7 @@ sub new_from_fh {
 
     tie *$self, 'Net::Server::Proto::Coro::FH', fh => $fh, @_;
 
-    bless \$self, ref $class ? ref $class : $class;
+    bless \*$self, ref $class ? ref $class : $class;
 }
 
 sub NS_host   { tied( *${+shift} )->[0]->NS_host(@_) };
