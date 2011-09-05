@@ -260,6 +260,15 @@ sub start_SSL {
     $_[0][10] = Net::SSLeay::new($ctx);
     Net::SSLeay::set_fd( $_[0][10], fileno( $_[0][0] ) );
 
+    # Purge any remaining contents of the read buffer.  This prevents
+    # plaintext injection attacks wherein attackers could cause
+    # nominally SSL-only commands to be executed by appending them to
+    # the end of a STARTTLS.
+    if (length $_[0][3]) {
+        warn "SSL accept with pending plaintext (attempted CVE-2011-0411 attack?)\n";
+        $_[0][3] = "";
+    }
+
     while (1) {
         my $rv = Net::SSLeay::accept($_[0][10]);
         if ( $rv < 0 ) {
