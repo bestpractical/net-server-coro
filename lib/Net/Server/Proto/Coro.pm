@@ -11,32 +11,32 @@ sub new_from_fh {
     my $fh    = shift or return;
     my $self  = do { local *Coro::Handle };
 
-    tie $self, 'Net::Server::Proto::Coro::FH', fh => $fh, @_;
+    tie *$self, 'Net::Server::Proto::Coro::FH', fh => $fh, @_;
 
     bless \$self, ref $class ? ref $class : $class;
 }
 
-sub NS_host   { tied( ${+shift} )->[0]->NS_host(@_) };
-sub NS_port   { tied( ${+shift} )->[0]->NS_port(@_) };
-sub NS_proto  { tied( ${+shift} )->[0]->NS_proto(@_) };
-sub sockport  { tied( ${+shift} )->[0]->sockport(@_) };
-sub connect   { tied( ${+shift} )->[0]->connect(@_) };
-sub reconnect { tied( ${+shift} )->[0]->reconnect(@_) };
+sub NS_host   { tied( *${+shift} )->[0]->NS_host(@_) };
+sub NS_port   { tied( *${+shift} )->[0]->NS_port(@_) };
+sub NS_proto  { tied( *${+shift} )->[0]->NS_proto(@_) };
+sub sockport  { tied( *${+shift} )->[0]->sockport(@_) };
+sub connect   { tied( *${+shift} )->[0]->connect(@_) };
+sub reconnect { tied( *${+shift} )->[0]->reconnect(@_) };
 
 sub accept {
     my $self = shift;
 
-    my $socket = tied( ${$self} )->[0];
+    my $socket = tied( *${$self} )->[0];
     while (1) {
         $self->readable or return;
         my ( $fh, $peername ) = $socket->accept;
         if ($peername) {
             my $socket = $self->new_from_fh(
                 $fh,
-                forward_class => tied( ${$self} )->[7],
-                expects_ssl   => tied( ${$self} )->[9],
-                server_cert   => tied( ${$self} )->[12],
-                server_key    => tied( ${$self} )->[13],
+                forward_class => tied( *${$self} )->[7],
+                expects_ssl   => tied( *${$self} )->[9],
+                server_cert   => tied( *${$self} )->[12],
+                server_key    => tied( *${$self} )->[13],
             );
             return wantarray ? ( $socket, $peername ) : $socket;
         }
@@ -46,24 +46,24 @@ sub accept {
 }
 
 sub expects_ssl {
-    my $self = tied ${ $_[0] };
+    my $self = tied *${ $_[0] };
     $self->[9] = shift if @_;
     return $self->[9];
 }
 
 sub is_ssl {
-    my $self = tied ${ $_[0] };
+    my $self = tied *${ $_[0] };
     return $self->[10] ? 1 : 0;
 }
 
-sub start_SSL   { Net::Server::Proto::Coro::FH::start_SSL( tied ${+shift}, @_) }
-sub read        { Net::Server::Proto::Coro::FH::READ     ( tied ${$_[0]}, $_[1], $_[2], $_[3]) }
-sub sysread     { Net::Server::Proto::Coro::FH::READ     ( tied ${$_[0]}, $_[1], $_[2], $_[3]) }
-sub syswrite    { Net::Server::Proto::Coro::FH::WRITE    ( tied ${$_[0]}, $_[1], $_[2], $_[3]) }
-sub print       { Net::Server::Proto::Coro::FH::WRITE    ( tied ${+shift}, join "", @_) }
-sub printf      { Net::Server::Proto::Coro::FH::PRINTF   ( tied ${+shift}, @_) }
-sub fileno      { Net::Server::Proto::Coro::FH::FILENO   ( tied ${$_[0]}) }
-sub close       { Net::Server::Proto::Coro::FH::CLOSE    ( tied ${$_[0]}) }
+sub start_SSL   { Net::Server::Proto::Coro::FH::start_SSL( tied *${+shift}, @_) }
+sub read        { Net::Server::Proto::Coro::FH::READ     ( tied *${$_[0]}, $_[1], $_[2], $_[3]) }
+sub sysread     { Net::Server::Proto::Coro::FH::READ     ( tied *${$_[0]}, $_[1], $_[2], $_[3]) }
+sub syswrite    { Net::Server::Proto::Coro::FH::WRITE    ( tied *${$_[0]}, $_[1], $_[2], $_[3]) }
+sub print       { Net::Server::Proto::Coro::FH::WRITE    ( tied *${+shift}, join "", @_) }
+sub printf      { Net::Server::Proto::Coro::FH::PRINTF   ( tied *${+shift}, @_) }
+sub fileno      { Net::Server::Proto::Coro::FH::FILENO   ( tied *${$_[0]}) }
+sub close       { Net::Server::Proto::Coro::FH::CLOSE    ( tied *${$_[0]}) }
 
 package Net::Server::Proto::Coro::FH;
 use base qw/Coro::Handle::FH/;
