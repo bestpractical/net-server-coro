@@ -11,4 +11,6 @@ requires('EV');
 requires('Net::Server');
 requires('Net::SSLeay');
 
+sign;
+
 &WriteAll;
