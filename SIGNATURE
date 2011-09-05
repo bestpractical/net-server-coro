@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.66.
+signed via the Module::Signature module, version 0.68.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,26 +14,26 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 869df37c1c6060ca00d810f31d0651bbf8992099 Changes
+SHA1 ac7e68c653531d1ce2bd614f4f6323523ca3f13a Changes
 SHA1 6560e9fb53ffae9afbaddb4919987a778d7cfd88 MANIFEST
-SHA1 360220d22ff33aade281f065379db9707b447ad3 META.yml
+SHA1 4aa331a928d60ab527995fd4ed691f0ee2b8c612 META.yml
 SHA1 bc22590cf5cc348fedc293e8ea39bcdc72ad897f Makefile.PL
 SHA1 f5333026061a6f347e7f2a3ce8bb6847081c200c certs/server-cert.pem
 SHA1 4b963cd4c2b0a7e073241b4bac727cb6f96276f8 certs/server-key.pem
-SHA1 7305dbe2904416e28decb05396988a5d51d578be inc/Module/Install.pm
-SHA1 129960509127732258570c122042bc48615222e1 inc/Module/Install/Base.pm
-SHA1 cf3356ed9a5bd2f732527ef9e7bc5ef4458c8a93 inc/Module/Install/Can.pm
-SHA1 bf0a3e1977effc2832d7a813a76dce3f31b437b6 inc/Module/Install/Fetch.pm
-SHA1 b721c93ca5bc9a6aa863b49af15f1b1de6125935 inc/Module/Install/Makefile.pm
-SHA1 026cc0551a0ad399d195e395b46bdf842e115192 inc/Module/Install/Metadata.pm
-SHA1 5457015ea5a50e93465bf2dafa29feebd547f85b inc/Module/Install/Win32.pm
-SHA1 051e7fa8063908befa3440508d0584a2497b97db inc/Module/Install/WriteAll.pm
-SHA1 065dd4af2c257ca8c73fbfc8aea67d328a03e156 lib/Net/Server/Coro.pm
-SHA1 ae1343edb7b6ce667e7f1f8ed3bfea423ab9e84a lib/Net/Server/Proto/Coro.pm
+SHA1 7b4ae50ebac72d20761171c4c2b50c206344ea40 inc/Module/Install.pm
+SHA1 d9fe55a427fe2fd75b5029afeeaa61b592e07f79 inc/Module/Install/Base.pm
+SHA1 62d3922826d9f89f20c185e7031ac8f028504745 inc/Module/Install/Can.pm
+SHA1 dc809f64fb70a26b069a36f8d3d353d520dbb7e1 inc/Module/Install/Fetch.pm
+SHA1 73ab91490a628452cc140db72ef9d13a1326d211 inc/Module/Install/Makefile.pm
+SHA1 8ce3f2b414e4617e6233dd4ba10830f8c5d672ec inc/Module/Install/Metadata.pm
+SHA1 3b0acd2eeac93a0afe48120f5648f0db362e5bbf inc/Module/Install/Win32.pm
+SHA1 f08924f051e623f8e09fa6a121993c4a9cf7d9eb inc/Module/Install/WriteAll.pm
+SHA1 54655ac2ab1391198f3951d05eb5cc3df80dab8b lib/Net/Server/Coro.pm
+SHA1 b50d07e251da5fe7a638845d2881e02c776d8465 lib/Net/Server/Proto/Coro.pm
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.10 (GNU/Linux)
+Version: GnuPG v1.4.11 (GNU/Linux)
 
-iEYEARECAAYFAkzgvUEACgkQMflWJZZAbqDsbgCfVgOJKMXilRg119irH62VaMpF
-LUgAoK6DmhGnHVRB1nobfCDc1h2L2YYI
-=bgZT
+iEYEARECAAYFAk5kX3QACgkQMflWJZZAbqDslgCgmV60MHIs64nSwzhvq/ZF6Nnr
+rHgAn3L7F4M/nt+LU533sUxi2fTrxSEu
+=FCqq
 -----END PGP SIGNATURE-----
