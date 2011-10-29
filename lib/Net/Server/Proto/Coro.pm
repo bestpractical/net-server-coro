@@ -4,8 +4,6 @@ use warnings;
 package Net::Server::Proto::Coro;
 use base qw/Coro::Socket/;
 
-use Net::SSLeay;
-
 sub new_from_fh {
     my $class = shift;
     my $fh    = shift or return;
@@ -68,14 +66,23 @@ sub close       { Net::Server::Proto::Coro::FH::CLOSE    ( tied *${$_[0]}) }
 package Net::Server::Proto::Coro::FH;
 use base qw/Coro::Handle::FH/;
 
+our $HAS_SSL;
+
 BEGIN {
-    Net::SSLeay::load_error_strings();
-    Net::SSLeay::SSLeay_add_ssl_algorithms();
-    Net::SSLeay::randomize();
+    $HAS_SSL = 0;
+    if (eval {require Net::SSLeay; 1} ) {
+        $HAS_SSL = 1;
+        Net::SSLeay::load_error_strings();
+        Net::SSLeay::SSLeay_add_ssl_algorithms();
+        Net::SSLeay::randomize();
+    }
 }
 
 sub TIEHANDLE {
     my ( $class, %arg ) = @_;
+
+    die "Net::SSLeay is required for SSL sockets"
+        if $arg{expects_ssl} and not $HAS_SSL;
 
     my $self = $class->SUPER::TIEHANDLE(%arg);
     $self->[9]  = $arg{expects_ssl};
@@ -236,6 +243,9 @@ use constant SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER => 2;
 use vars qw/$CONTEXT/;
 
 sub start_SSL {
+    die "Net::SSLeay is required for SSL sockets"
+        if not $HAS_SSL;
+
     my $ctx;
     $_[0][9] = 1;
     my $server_cert = $_[1] || $_[0][12] || "certs/server-cert.pem";
@@ -244,7 +254,7 @@ sub start_SSL {
         unless -r $server_cert and -r $server_key;
 
     unless ($CONTEXT) {
-        $ctx = $CONTEXT = Net::SSLeay::CTX_new;
+        $ctx = $CONTEXT = Net::SSLeay::CTX_new();
         Net::SSLeay::CTX_set_options( $ctx, Net::SSLeay::OP_ALL() );
         Net::SSLeay::CTX_set_mode( $ctx,
             SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER
