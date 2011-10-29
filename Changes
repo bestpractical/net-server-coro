@@ -1,5 +1,8 @@
 Revision history for Net-Server-Coro
 
+1.2    Sat Oct 29 02:26:17 2011
+        * Net::SSLeay is now an optional dependency
+
 1.1    Mon Sep  5 01:15:17 2011
         * Fix SIGNATURE; no code changes
 
