@@ -1,6 +1,6 @@
-Makefile
-Makefile.old
-MYMETA.yml
-blib
-pm_to_blib
-Net-Server-Coro-*.tar.gz
+/Makefile
+/Makefile.old
+/MYMETA.*
+/blib
+/pm_to_blib
+/Net-Server-Coro-*.tar.gz
