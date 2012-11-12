@@ -21,7 +21,7 @@ recommends:
 requires:
   Coro: 0
   EV: 0
-  Net::Server: 0
+  Net::Server: 2
 resources:
   license: http://opensource.org/licenses/mit-license.php
 version: 1.2

@@ -8,7 +8,7 @@ license('MIT');
 
 requires('Coro');
 requires('EV');
-requires('Net::Server');
+requires('Net::Server' => 2.000);
 
 recommends('Net::SSLeay');
 
