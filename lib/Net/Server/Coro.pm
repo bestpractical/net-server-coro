@@ -12,7 +12,7 @@ use Socket ();
 use base qw(Net::Server);
 use Net::Server::Proto::Coro;
 
-$VERSION = '1.2';
+$VERSION = '1.3';
 
 =head1 NAME
 

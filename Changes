@@ -1,5 +1,8 @@
 Revision history for Net-Server-Coro
 
+1.3    Mon Nov 12 03:11:17 2012
+        * Require Net::Server 2.0, and adjust to its API
+
 1.2    Sat Oct 29 02:26:17 2011
         * Net::SSLeay is now an optional dependency
 
@@ -7,7 +10,7 @@ Revision history for Net-Server-Coro
         * Fix SIGNATURE; no code changes
 
 1.0    Mon Sep  5 00:03:17 2011
-        * Catch and watn of possible CVE-2011-0411 attacks
+        * Catch and warn of possible CVE-2011-0411 attacks
         * No longer make use of a bug in perl pre 5.14 wherein TIEHANDLE
           happened to be called on scalars containing typeglobs
 

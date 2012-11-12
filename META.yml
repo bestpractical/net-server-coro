@@ -25,4 +25,4 @@ requires:
   Net::Server: 2
 resources:
   license: http://opensource.org/licenses/mit-license.php
-version: 1.2
+version: 1.3
