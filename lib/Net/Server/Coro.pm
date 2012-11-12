@@ -4,7 +4,7 @@ use warnings;
 package Net::Server::Coro;
 
 use vars qw($VERSION);
-use EV;
+use AnyEvent;
 use Coro;
 use Coro::Specific;
 use Coro::Util ();
@@ -174,7 +174,7 @@ coroutines.
 
 =item *
 
-The L<EV> event loop.
+An L<AnyEvent> infinite wait, which equates to the "run the event loop."
 
 =back
 
@@ -204,10 +204,12 @@ sub loop {
         $Coro::current->prio(3);
         $Coro::current->desc("Event loop");
 
-        # Use EV signal handlers;
-        my @shutdown = map EV::signal( $_ => sub { $self->server_close; } ),
-            qw/INT TERM QUIT/;
-        EV::loop() while 1;
+        my $exit = AnyEvent->condvar;
+        my @shutdown = map { AnyEvent->signal(
+            signal => $_,
+            cb     => sub { $self->server_close; $exit->send; }
+        ) } qw/INT TERM QUIT/;
+        $exit->recv;
     };
 
     schedule;
@@ -247,7 +249,7 @@ sub server_key {
 
 =head1 DEPENDENCIES
 
-L<Coro>, L<EV>, L<Net::Server>
+L<Coro>, L<AnyEvent>, L<Net::Server>
 
 =head1 BUGS AND LIMITATIONS
 

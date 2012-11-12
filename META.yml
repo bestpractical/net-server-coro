@@ -19,8 +19,8 @@ no_index:
 recommends:
   Net::SSLeay: 0
 requires:
+  AnyEvent: 0
   Coro: 0
-  EV: 0
   Net::Server: 2
 resources:
   license: http://opensource.org/licenses/mit-license.php
