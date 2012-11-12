@@ -50,6 +50,8 @@ usage details.
 Create new Net::Server::Coro object. It accepts these parameters (in
 addition to L<Net::Server> parameters):
 
+=over
+
 =item server_cert
 
 Path to the SSL certificate that the server should use. This can be
@@ -61,6 +63,8 @@ F<certs/server-cert.pem>
 Path to the SSL certificate key that the server should use. This can
 be either relative or absolute path.  Defaults to
 F<certs/server-key.pem>
+
+=back
 
 =cut
 
